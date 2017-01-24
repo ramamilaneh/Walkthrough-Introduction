@@ -12,6 +12,13 @@ class FactCell: UICollectionViewCell {
     
     let factImageView = UIImageView()
     
+    let factText: UITextView = {
+        let tv = UITextView()
+        tv.text = "Some Text....."
+        tv.isEditable = false
+        return tv
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInt()
@@ -22,17 +29,23 @@ class FactCell: UICollectionViewCell {
     }
     
     func commonInt() {
-        
-        setupFactImageView()
+
+        setup()
+
     }
     
-    func setupFactImageView()  {
+    func setup()  {
         
         self.addSubview(factImageView)
+        self.addSubview(factText)
         factImageView.contentMode = .scaleAspectFill
         factImageView.clipsToBounds = true
-        factImageView.constrainViewToEdges(of: self)
         factImageView.image = UIImage(named: "water-consumption")
         factImageView.backgroundColor = UIColor.yellow
+        factImageView.anchorToTop(top: topAnchor, left: leftAnchor, bottom: factText.topAnchor, right: rightAnchor)
+        self.factText.anchorToTop(top: nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        self.factText.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.3).isActive = true
+        
     }
-}
+    
+    }

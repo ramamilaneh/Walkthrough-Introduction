@@ -13,6 +13,7 @@
 		A288309B1E34176F00768AB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A288309A1E34176F00768AB5 /* Assets.xcassets */; };
 		A288309E1E34176F00768AB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A288309C1E34176F00768AB5 /* LaunchScreen.storyboard */; };
 		A28830A61E379A7A00768AB5 /* FactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28830A51E379A7A00768AB5 /* FactCell.swift */; };
+		A28830AA1E37C4E800768AB5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28830A91E37C4E800768AB5 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A288309D1E34176F00768AB5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A288309F1E34176F00768AB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A28830A51E379A7A00768AB5 /* FactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FactCell.swift; sourceTree = "<group>"; };
+		A28830A91E37C4E800768AB5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				A288309A1E34176F00768AB5 /* Assets.xcassets */,
 				A288309C1E34176F00768AB5 /* LaunchScreen.storyboard */,
 				A288309F1E34176F00768AB5 /* Info.plist */,
+				A28830A91E37C4E800768AB5 /* Extensions.swift */,
 			);
 			path = "Walkthrough-Introduction";
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 				A28830961E34176F00768AB5 /* ViewController.swift in Sources */,
 				A28830A61E379A7A00768AB5 /* FactCell.swift in Sources */,
 				A28830941E34176F00768AB5 /* AppDelegate.swift in Sources */,
+				A28830AA1E37C4E800768AB5 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

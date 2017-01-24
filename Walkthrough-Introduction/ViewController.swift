@@ -9,40 +9,52 @@
 import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
-   lazy var pagescollectionView: UICollectionView = { [unowned self] in
-      let layout = UICollectionViewLayout()
-      let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-      cv.delegate = self
-      cv.dataSource = self
-      cv.backgroundColor = UIColor.cyan
+    
+    lazy var factsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0 // To get rid of the spacing between pages
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.delegate = self
+        cv.dataSource = self
+        cv.backgroundColor = UIColor.white
+        cv.isPagingEnabled = true 
         return cv
     }()
     
-    let cellIdentifire = "basicCell"
+    let cellIdentifire = "factCell"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-       view.addSubview(pagescollectionView)
-       pagescollectionView.constrainViewToEdges(of: self.view)
-       pagescollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifire)
-        
+        view.addSubview(factsCollectionView)
+        factsCollectionView.constrainViewToEdges(of: self.view)
+        factsCollectionView.register(FactCell.self, forCellWithReuseIdentifier: cellIdentifire)
+        factsCollectionView.backgroundColor = UIColor.brown
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
     }
    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifire, for: indexPath)
-        cell.backgroundColor = UIColor.yellow
+       // cell.backgroundColor = UIColor.blue
         return cell
     }
-
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: view.frame.width, height: view.frame.height)
+        
+    }
 }
 
 extension UIView {

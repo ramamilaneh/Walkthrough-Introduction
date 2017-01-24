@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // ceate collection view
     lazy var factsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -22,20 +23,36 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cv
     }()
     
-    let cellIdentifire = "factCell"
     var facts = [FactModel]()
+
+    let pageController: UIPageControl = {
+        let pc = UIPageControl()
+        pc.pageIndicatorTintColor = UIColor.lightGray
+        pc.currentPageIndicatorTintColor = UIColor.cyan
+        pc.numberOfPages = 7
+        return pc
+    }()
+    
+    let cellIdentifire = "factCell"
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(factsCollectionView)
+        view.addSubview(pageController)
         factsCollectionView.constrainViewToEdges(of: self.view)
         factsCollectionView.register(FactCell.self, forCellWithReuseIdentifier: cellIdentifire)
-        factsCollectionView.backgroundColor = UIColor.cyan
+        factsCollectionView.backgroundColor = UIColor.white
+        _ = pageController.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 30)
         self.facts = createFacts()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let pageNumber = Int(targetContentOffset.pointee.x/self.view.frame.width)
+        pageController.currentPage = pageNumber
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1

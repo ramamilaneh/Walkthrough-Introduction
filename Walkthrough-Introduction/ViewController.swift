@@ -101,9 +101,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nextButton.setTitleColor(.darkPink, for: .normal)
         nextButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         nextButtonTopAnchor = nextButton.anchor(view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 15, leftConstant: 0, bottomConstant: 0, rightConstant: 10 , widthConstant: 50, heightConstant: 50).first
+        nextButton.addTarget(self, action: #selector(moveToNextPage), for: .touchUpInside)
         
     }
     
+    func moveToNextPage() {
+        if pageController.currentPage == facts.count {
+            return
+        }
+        if pageController.currentPage == facts.count - 1 {
+           moveControlOutOfScreen()
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+
+            
+        }
+        let indexPath = IndexPath(item: pageController.currentPage + 1, section: 0)
+        factsCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        pageController.currentPage += 1
+    }
 
 }
 
@@ -122,9 +139,7 @@ extension ViewController {
         
         //we are on the last page
         if pageNumber == facts.count {
-            pageControllerBottomAnchor?.constant = 40
-            skipButtonTopAnchor?.constant = -40
-            nextButtonTopAnchor?.constant = -40
+            moveControlOutOfScreen()
         } else {
             //back on regular pages
             pageControllerBottomAnchor?.constant = 0
@@ -138,6 +153,11 @@ extension ViewController {
         
     }
 
+    func moveControlOutOfScreen() {
+        pageControllerBottomAnchor?.constant = 40
+        skipButtonTopAnchor?.constant = -40
+        nextButtonTopAnchor?.constant = -40
+    }
 }
 
 

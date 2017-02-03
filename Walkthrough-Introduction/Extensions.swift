@@ -65,3 +65,48 @@ extension UIView {
         
 }
 
+extension UIColor {
+    
+    static var darkBlue: UIColor {
+        return UIColor(red: 11/255, green: 25/255, blue: 115/255, alpha: 0.9)
+    }
+    
+    static var lightBlue: UIColor {
+        return UIColor(red: 85/255, green: 218/255, blue: 232/255, alpha: 0.9)
+    }
+    
+    static var darkPink: UIColor {
+        return UIColor(red: 232/255, green: 12/255, blue: 122/255, alpha: 1)
+
+    }
+}
+
+// MARK: - Move the view up and down to handle the keyboard issue
+extension ViewController {
+    
+    func observeKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: .UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardHide() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+            
+        }, completion: nil)
+    }
+    
+    func keyboardShow() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            self.view.frame = CGRect(x: 0, y: -50, width: self.view.frame.width, height: self.view.frame.height)
+            
+        }, completion: nil)
+    }
+    
+    
+}
+
+

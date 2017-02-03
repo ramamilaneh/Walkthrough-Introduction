@@ -11,6 +11,7 @@ import UIKit
 class FactCell: UICollectionViewCell {
     
     var fact: FactModel? {
+        
         didSet {
             guard let fact = fact else {return}
             self.factImageView.image = UIImage(named: fact.imageName)

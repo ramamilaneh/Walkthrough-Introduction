@@ -10,39 +10,33 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    var facts = [FactModel]()
+    let cellIdentifire = "factCell"
+    let loginCellId = "loginCellId"
+    let pageController = UIPageControl()
+    let skipButton = UIButton(type: .system)
+    let nextButton = UIButton(type: .system)
+    var pageControllerBottomAnchor : NSLayoutConstraint?
+    var skipButtonTopAnchor: NSLayoutConstraint?
+    var nextButtonTopAnchor: NSLayoutConstraint?
+    
     // ceate collection view
-    lazy var factsCollectionView: UICollectionView = {
+    lazy var factsCollectionView: UICollectionView = { [unowned self] in
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0 // To get rid of the spacing between pages
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.delegate = self
         cv.dataSource = self
-        cv.backgroundColor = UIColor.white
-        cv.isPagingEnabled = true 
         return cv
     }()
     
-    var facts = [FactModel]()
-
-    let pageController: UIPageControl = {
-        let pc = UIPageControl()
-        pc.pageIndicatorTintColor = UIColor.lightGray
-        pc.currentPageIndicatorTintColor = UIColor.cyan
-        pc.numberOfPages = 7
-        return pc
-    }()
     
-    let cellIdentifire = "factCell"
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        view.addSubview(factsCollectionView)
-        view.addSubview(pageController)
-        factsCollectionView.constrainViewToEdges(of: self.view)
-        factsCollectionView.register(FactCell.self, forCellWithReuseIdentifier: cellIdentifire)
-        factsCollectionView.backgroundColor = UIColor.white
-        _ = pageController.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 30)
-        self.facts = createFacts()
+        self.facts = FactModel.createFacts()
+        configureViews()
     }
     
     override func didReceiveMemoryWarning() {
@@ -50,19 +44,44 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         // Dispose of any resources that can be recreated.
     }
     
+    // Get the number of the current page to make the page controller track it
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let pageNumber = Int(targetContentOffset.pointee.x/self.view.frame.width)
         pageController.currentPage = pageNumber
+        
+        //we are on the last page
+        if pageNumber == facts.count {
+            pageControllerBottomAnchor?.constant = 40
+            skipButtonTopAnchor?.constant = -40
+            nextButtonTopAnchor?.constant = -40
+        } else {
+            //back on regular pages
+            pageControllerBottomAnchor?.constant = 0
+            skipButtonTopAnchor?.constant = 16
+            nextButtonTopAnchor?.constant = 16
+        }
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+
     }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return facts.count
+        return facts.count + 1
     }
    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.item == facts.count {
+            let loginCell = collectionView.dequeueReusableCell(withReuseIdentifier: loginCellId, for: indexPath)
+            return loginCell
+        }
+
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifire, for: indexPath) as! FactCell
         cell.fact = facts[indexPath.item]
         return cell
@@ -74,18 +93,36 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
     }
     
-    func createFacts() -> [FactModel] {
+    func configureViews() {
+        let textColor = UIColor(red: 232/255, green: 12/255, blue: 122/255, alpha: 1)
+        view.addSubview(factsCollectionView)
+        view.addSubview(pageController)
+        view.addSubview(skipButton)
+        view.addSubview(nextButton)
         
-        let fact1 = FactModel(title: "Save Water", message: "Saving water is your decision, we can add here as many facts or text we need ", imageName: "fact1")
-        let fact2 = FactModel(title: "Wasting water", message: "You are wasting water every day in bathroom, kitchen, yard", imageName: "fact10")
-        let fact3 = FactModel(title: "Stop", message: "Your wasting a lot of water in your shower", imageName: "fact3")
-        let fact4 = FactModel(title: "Stop!!!", message: "People are thirsty and you are wasting water", imageName: "fact9")
-        let fact5 = FactModel(title: "Water wasting result", message: "Wasting water kills the life of Earth", imageName: "fact4")
-        let fact6 = FactModel(title: "How to save water", message: "Check out these ways to save water", imageName: "fact14")
-         let fact7 = FactModel(title: "You killed your kids", message: "What you do is affecting you and your family ", imageName: "fact13")
+        factsCollectionView.constrainViewToEdges(of: self.view)
+        factsCollectionView.register(FactCell.self, forCellWithReuseIdentifier: cellIdentifire)
+        factsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: loginCellId)
+        factsCollectionView.backgroundColor = UIColor.white
+        factsCollectionView.backgroundColor = UIColor.white
+        factsCollectionView.isPagingEnabled = true
+
         
+        pageController.pageIndicatorTintColor = UIColor.lightGray
+        pageController.currentPageIndicatorTintColor = textColor
+        pageController.numberOfPages = self.facts.count + 1
+        pageControllerBottomAnchor = pageController.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 30)[1]
+
+        skipButton.setTitle("Skip", for: .normal)
+        skipButton.setTitleColor(textColor, for: .normal)
+        skipButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        skipButtonTopAnchor = skipButton.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 15, leftConstant: 10, bottomConstant: 0, rightConstant: 0 , widthConstant: 50, heightConstant: 50).first
         
-        return [fact1,fact2,fact3,fact4,fact5,fact6,fact7]
+        nextButton.setTitle("Next", for: .normal)
+        nextButton.setTitleColor(textColor, for: .normal)
+        nextButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        nextButtonTopAnchor = nextButton.anchor(view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 15, leftConstant: 0, bottomConstant: 0, rightConstant: 10 , widthConstant: 50, heightConstant: 50).first
+        
     }
 }
 

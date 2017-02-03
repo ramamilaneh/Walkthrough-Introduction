@@ -96,6 +96,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         skipButton.setTitleColor(.darkPink, for: .normal)
         skipButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         skipButtonTopAnchor = skipButton.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 15, leftConstant: 10, bottomConstant: 0, rightConstant: 0 , widthConstant: 50, heightConstant: 50).first
+        skipButton.addTarget(self, action: #selector(skip), for: .touchUpInside)
         
         nextButton.setTitle("Next", for: .normal)
         nextButton.setTitleColor(.darkPink, for: .normal)
@@ -103,6 +104,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         nextButtonTopAnchor = nextButton.anchor(view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 15, leftConstant: 0, bottomConstant: 0, rightConstant: 10 , widthConstant: 50, heightConstant: 50).first
         nextButton.addTarget(self, action: #selector(moveToNextPage), for: .touchUpInside)
         
+    }
+    
+    func skip() {
+        pageController.currentPage = facts.count - 1
+        moveToNextPage()
     }
     
     func moveToNextPage() {
